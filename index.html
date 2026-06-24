@@ -538,17 +538,14 @@ function sign(h, a) { return h > a ? '1' : h === a ? 'X' : '2'; }
 function calcPts(p) {
   let pts = 0, bd = [];
   const rc = real._champion, rr = real._runnerUp, rt = real._third, rs = real._scorer;
-
   if (rc && p.champion === rc)   { pts += 10; bd.push('🏆+10'); }
   if (rr && p.runnerUp === rr)   { pts += 6;  bd.push('🥈+6');  }
   if (rt && p.third === rt)      { pts += 4;  bd.push('🥉+4');  }
   if (rs && p.scorer && p.scorer.toLowerCase().includes(rs.split(' ')[0].toLowerCase())) { pts += 3; bd.push('⚽+3'); }
-
   let gpts = 0;
   const realG = real._groups || {};
   Object.entries(realG).forEach(([g, t]) => { if (p.groups && p.groups[g] === t) gpts += 2; });
   if (gpts > 0) { pts += gpts; bd.push('📊+' + gpts); }
-
   let mEx = 0, m1x2 = 0;
   Object.entries(real).forEach(([id, r]) => {
     if (id.startsWith('_')) return;
@@ -559,10 +556,9 @@ function calcPts(p) {
   });
   if (mEx > 0)  bd.push('✅×' + mEx + '(+' + (mEx * 3) + ')');
   if (m1x2 > 0) bd.push('1X2×' + m1x2 + '(+' + m1x2 + ')');
-
   return { pts, bd };
 }
-
+  
 // ─── FETCH ─────────────────────────────────────────────────
 async function loadData(force = false) {
   const btn = document.getElementById('refreshBtn');
@@ -686,18 +682,18 @@ function renderPredicciones(selId) {
       '<div class="loading"><div class="spinner"></div></div>';
     return;
   }
-
   const id  = selId || porras[0].id;
   const p   = porras.find(x => String(x.id) === String(id)) || porras[0];
   const { pts, bd } = calcPts(p);
-
   const champStatus = real._champion
     ? (p.champion === real._champion ? 'correct' : 'wrong')
     : 'pending';
   const ruStatus = real._runnerUp
     ? (p.runnerUp === real._runnerUp ? 'correct' : 'wrong')
     : 'pending';
-
+  const thirdStatus = real._third
+    ? (p.third === real._third ? 'correct' : 'wrong')
+    : 'pending';
   let html = `
     <div class="selector-wrap">
       <label>Participante</label>
@@ -705,7 +701,6 @@ function renderPredicciones(selId) {
         ${porras.map(x => `<option value="${x.id}" ${String(x.id)===String(id)?'selected':''}>${x.name}${x.alias?' · '+x.alias:''}</option>`).join('')}
       </select>
     </div>
-
     <div class="pred-cards">
       <div class="pred-card">
         <div class="lbl">Puntos</div>
@@ -720,12 +715,29 @@ function renderPredicciones(selId) {
         <div class="val ${ruStatus}">${p.runnerUp || '–'}</div>
       </div>
       <div class="pred-card">
+        <div class="lbl">Tercer puesto</div>
+        <div class="val ${thirdStatus}">${p.third || '–'}</div>
+      </div>
+      <div class="pred-card">
         <div class="lbl">Goleador</div>
         <div class="val pending">${p.scorer || '–'}</div>
       </div>
     </div>
+    <div class="section-label">Primeros de grupo</div>
+    <div class="pred-cards">
+      ${GROUPS.map(g => {
+        const pick = p.groups ? p.groups[g] : undefined;
+        const realPick = real._groups ? real._groups[g] : undefined;
+        const status = realPick ? (pick === realPick ? 'correct' : 'wrong') : 'pending';
+        return `
+          <div class="pred-card">
+            <div class="lbl">Grupo ${g}</div>
+            <div class="val ${status}">${pick || '–'}</div>
+          </div>
+        `;
+      }).join('')}
+    </div>
   `;
-
   GROUPS.forEach(g => {
     const ms = MATCHES.filter(m => m.g === g);
     html += `<div class="section-label">Grupo ${g}</div><div class="card">`;
@@ -754,10 +766,9 @@ function renderPredicciones(selId) {
     });
     html += `</div>`;
   });
-
   document.getElementById('tabPredicciones').innerHTML = html;
 }
-
+  
 // ─── NAV ───────────────────────────────────────────────────
 function switchTab(tab) {
   currentTab = tab;
