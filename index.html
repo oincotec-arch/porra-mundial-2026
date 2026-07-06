@@ -817,7 +817,7 @@ function renderMiPorra() {
       const fix = kof[id];
       const existing = myPorra.matches?.[id];
       const r = real[id];
-      const disabled = isLocked || !!r;
+      const disabled = isLocked || !!r; // bloqueado si ronda enviada O si ya hay resultado
       const borderColor = disabled ? 'var(--border)' : 'rgba(245,158,11,0.4)';
       const opacity = disabled ? '0.5' : '1';
       html += `
@@ -882,27 +882,36 @@ async function saveMiKOPredictions(roundId) {
     if (hv !== '' && av !== '') koPreds[id] = {h: parseInt(hv,10), a: parseInt(av,10)};
   });
 
-  const updated = {
-    ...myPorra,
-    matches: {...(myPorra.matches||{}), ...koPreds},
-    koLocked: [...(myPorra.koLocked||[]), roundId]
-  };
-
   try {
-    await fetch(API + '?' + new URLSearchParams({action:'savePorra', data:JSON.stringify(updated)}));
+    const resp = await fetch(API + '?' + new URLSearchParams({
+      action: 'addKOPredictions',
+      id: String(myPorra.id),
+      roundId: roundId,
+      data: JSON.stringify(koPreds)
+    }));
+    const result = await resp.json().catch(() => ({}));
+    if (result.error) throw new Error(result.error);
+
+    // Actualizar estado local
+    const updated = {
+      ...myPorra,
+      matches: {...(myPorra.matches||{}), ...koPreds},
+      koLocked: [...(myPorra.koLocked||[]), roundId]
+    };
+    const idx = porras.findIndex(p => p.id === updated.id);
+    if (idx >= 0) porras[idx] = updated; else porras.push(updated);
     const cached = localStorage.getItem('porra26_cache');
     if (cached) {
       const d = JSON.parse(cached);
-      const idx = d.porras.findIndex(p => p.id === updated.id);
-      if (idx >= 0) d.porras[idx] = updated; else d.porras.push(updated);
+      const ci = d.porras.findIndex(p => p.id === updated.id);
+      if (ci >= 0) d.porras[ci] = updated; else d.porras.push(updated);
       localStorage.setItem('porra26_cache', JSON.stringify(d));
-      porras = d.porras;
     }
     renderMiPorra();
   } catch(e) {
     if (btn) { btn.disabled = false; btn.textContent = '🔒 ENVIAR ' + round.label.toUpperCase(); }
     const errEl = document.getElementById('miporraErr_' + roundId);
-    if (errEl) { errEl.textContent='Error al guardar. Comprueba tu conexión.'; errEl.style.display='block'; setTimeout(()=>errEl.style.display='none',4000); }
+    if (errEl) { errEl.textContent = 'Error: ' + e.message; errEl.style.display='block'; setTimeout(()=>errEl.style.display='none',6000); }
   }
 }
 
