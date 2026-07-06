@@ -11,355 +11,70 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     :root {
-      --bg: #0a0e1a;
-      --surface: #141829;
-      --surface2: #1e2340;
-      --accent: #f59e0b;
-      --green: #10b981;
-      --red: #ef4444;
-      --text: #f1f5f9;
-      --text2: #64748b;
-      --border: rgba(255,255,255,0.07);
-      --radius: 14px;
+      --bg: #0a0e1a; --surface: #141829; --surface2: #1e2340;
+      --accent: #f59e0b; --green: #10b981; --red: #ef4444;
+      --text: #f1f5f9; --text2: #64748b; --border: rgba(255,255,255,0.07); --radius: 14px;
     }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      overflow-x: hidden;
-    }
-    /* ── HEADER ── */
-    .header {
-      background: linear-gradient(160deg, #0f172a 0%, #1a2035 100%);
-      padding: 14px 18px 12px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .header-left h1 {
-      font-size: 17px;
-      font-weight: 800;
-      background: linear-gradient(135deg, #f59e0b, #fbbf24);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: -0.3px;
-    }
-    .header-left .sub {
-      font-size: 11px;
-      color: var(--text2);
-      margin-top: 2px;
-    }
-    .refresh-btn {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text2);
-      border-radius: 10px;
-      width: 38px;
-      height: 38px;
-      font-size: 18px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-      flex-shrink: 0;
-    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100dvh; display: flex; flex-direction: column; overflow-x: hidden; }
+    .header { background: linear-gradient(160deg, #0f172a 0%, #1a2035 100%); padding: 14px 18px 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+    .header-left h1 { font-size: 17px; font-weight: 800; background: linear-gradient(135deg, #f59e0b, #fbbf24); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.3px; }
+    .header-left .sub { font-size: 11px; color: var(--text2); margin-top: 2px; }
+    .refresh-btn { background: var(--surface2); border: 1px solid var(--border); color: var(--text2); border-radius: 10px; width: 38px; height: 38px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
     .refresh-btn:active { transform: scale(0.9); }
     .refresh-btn.spinning { animation: spin 0.8s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    /* ── CONTENT ── */
-    .content {
-      flex: 1;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: calc(72px + env(safe-area-inset-bottom));
-    }
-    /* ── BOTTOM NAV ── */
-    .bottom-nav {
-      position: fixed;
-      bottom: 0; left: 0; right: 0;
-      background: #0c1020;
-      border-top: 1px solid var(--border);
-      display: flex;
-      padding-bottom: env(safe-area-inset-bottom);
-      z-index: 100;
-    }
-    .nav-btn {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 6px;
-      cursor: pointer;
-      color: var(--text2);
-      font-size: 10px;
-      font-weight: 600;
-      gap: 3px;
-      background: none;
-      border: none;
-      letter-spacing: 0.3px;
-      transition: color 0.15s;
-    }
+    .content { flex: 1; overflow-y: auto; -webkit-overflow-scrolling: touch; padding-bottom: calc(72px + env(safe-area-inset-bottom)); }
+    .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #0c1020; border-top: 1px solid var(--border); display: flex; padding-bottom: env(safe-area-inset-bottom); z-index: 100; }
+    .nav-btn { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 10px 6px; cursor: pointer; color: var(--text2); font-size: 10px; font-weight: 600; gap: 3px; background: none; border: none; letter-spacing: 0.3px; transition: color 0.15s; }
     .nav-btn .icon { font-size: 21px; line-height: 1; }
     .nav-btn.active { color: var(--accent); }
-    /* ── TABS ── */
-    .tab { display: none; }
-    .tab.active { display: block; }
-    /* ── SECTION LABEL ── */
-    .section-label {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 1.2px;
-      color: var(--text2);
-      padding: 18px 18px 8px;
-    }
-    /* ── CARD ── */
-    .card {
-      background: var(--surface);
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      margin: 0 14px 4px;
-      overflow: hidden;
-    }
-    /* ── RANKING ── */
-    .rank-row {
-      display: flex;
-      align-items: center;
-      padding: 13px 16px;
-      border-bottom: 1px solid var(--border);
-      gap: 13px;
-      cursor: pointer;
-      transition: background 0.1s;
-    }
+    .tab { display: none; } .tab.active { display: block; }
+    .section-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: var(--text2); padding: 18px 18px 8px; }
+    .card { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); margin: 0 14px 4px; overflow: hidden; }
+    .rank-row { display: flex; align-items: center; padding: 13px 16px; border-bottom: 1px solid var(--border); gap: 13px; cursor: pointer; transition: background 0.1s; }
     .rank-row:last-child { border-bottom: none; }
     .rank-row:active { background: var(--surface2); }
-    .rank-pos {
-      font-size: 13px;
-      font-weight: 700;
-      width: 28px;
-      text-align: center;
-      flex-shrink: 0;
-      color: var(--text2);
-    }
+    .rank-pos { font-size: 13px; font-weight: 700; width: 28px; text-align: center; flex-shrink: 0; color: var(--text2); }
     .rank-info { flex: 1; min-width: 0; }
-    .rank-name {
-      font-size: 15px;
-      font-weight: 600;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .rank-alias {
-      font-size: 12px;
-      color: var(--text2);
-      margin-top: 1px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
+    .rank-name { font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rank-alias { font-size: 12px; color: var(--text2); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .rank-right { text-align: right; flex-shrink: 0; }
-    .rank-pts {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--accent);
-      line-height: 1;
-    }
-    .rank-bd {
-      font-size: 10px;
-      color: var(--text2);
-      margin-top: 3px;
-      max-width: 140px;
-      text-align: right;
-      line-height: 1.4;
-    }
-    .stats-bar {
-      display: flex;
-      gap: 8px;
-      padding: 12px 14px;
-      margin: 0 14px 8px;
-    }
-    .stat-chip {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 8px 12px;
-      flex: 1;
-      text-align: center;
-    }
-    .stat-chip .val {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--accent);
-    }
-    .stat-chip .lbl {
-      font-size: 10px;
-      color: var(--text2);
-      margin-top: 2px;
-    }
-    /* ── MATCHES ── */
-    .match-row {
-      display: grid;
-      grid-template-columns: 1fr 68px 1fr;
-      align-items: center;
-      padding: 11px 14px;
-      border-bottom: 1px solid var(--border);
-      gap: 6px;
-    }
+    .rank-pts { font-size: 24px; font-weight: 800; color: var(--accent); line-height: 1; }
+    .rank-bd { font-size: 10px; color: var(--text2); margin-top: 3px; max-width: 140px; text-align: right; line-height: 1.4; }
+    .stats-bar { display: flex; gap: 8px; padding: 12px 14px; margin: 0 14px 8px; }
+    .stat-chip { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 8px 12px; flex: 1; text-align: center; }
+    .stat-chip .val { font-size: 18px; font-weight: 800; color: var(--accent); }
+    .stat-chip .lbl { font-size: 10px; color: var(--text2); margin-top: 2px; }
+    .match-row { display: grid; grid-template-columns: 1fr 68px 1fr; align-items: center; padding: 11px 14px; border-bottom: 1px solid var(--border); gap: 6px; }
     .match-row:last-child { border-bottom: none; }
     .team { font-size: 12px; font-weight: 500; line-height: 1.3; }
-    .team.home { text-align: right; }
-    .team.away { text-align: left; }
+    .team.home { text-align: right; } .team.away { text-align: left; }
     .score-box { text-align: center; }
-    .score-live {
-      font-size: 19px;
-      font-weight: 800;
-      color: var(--green);
-      letter-spacing: 1px;
-    }
-    .score-pending {
-      font-size: 10px;
-      color: var(--text2);
-      background: var(--surface2);
-      border-radius: 6px;
-      padding: 3px 7px;
-      display: inline-block;
-    }
-    /* ── PREDICCIONES ── */
-    .selector-wrap {
-      margin: 8px 14px 0;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 12px 14px;
-    }
-    .selector-wrap label {
-      font-size: 11px;
-      color: var(--text2);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      display: block;
-      margin-bottom: 8px;
-    }
-    .selector-wrap select {
-      width: 100%;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 10px;
-      padding: 10px 12px;
-      font-size: 15px;
-      -webkit-appearance: none;
-      appearance: none;
-    }
-    .pred-cards {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin: 10px 14px;
-    }
-    .pred-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 11px 13px;
-    }
-    .pred-card .lbl {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--text2);
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .pred-card .val {
-      font-size: 14px;
-      font-weight: 700;
-    }
-    .val.correct { color: var(--green); }
-    .val.wrong { color: var(--red); }
-    .val.pending { color: var(--text2); }
-    .pred-row {
-      display: grid;
-      grid-template-columns: 1fr 70px 1fr;
-      align-items: center;
-      padding: 9px 14px;
-      border-bottom: 1px solid var(--border);
-      gap: 4px;
-      font-size: 11px;
-    }
+    .score-live { font-size: 19px; font-weight: 800; color: var(--green); letter-spacing: 1px; }
+    .score-pending { font-size: 10px; color: var(--text2); background: var(--surface2); border-radius: 6px; padding: 3px 7px; display: inline-block; }
+    .selector-wrap { margin: 8px 14px 0; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 14px; }
+    .selector-wrap label { font-size: 11px; color: var(--text2); font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; display: block; margin-bottom: 8px; }
+    .selector-wrap select { width: 100%; background: var(--surface2); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 10px 12px; font-size: 15px; -webkit-appearance: none; appearance: none; }
+    .pred-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 14px; }
+    .pred-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 11px 13px; }
+    .pred-card .lbl { font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--text2); font-weight: 600; margin-bottom: 4px; }
+    .pred-card .val { font-size: 14px; font-weight: 700; }
+    .val.correct { color: var(--green); } .val.wrong { color: var(--red); } .val.pending { color: var(--text2); }
+    .pred-row { display: grid; grid-template-columns: 1fr 70px 1fr; align-items: center; padding: 9px 14px; border-bottom: 1px solid var(--border); gap: 4px; font-size: 11px; }
     .pred-row:last-child { border-bottom: none; }
     .pred-row.exact { background: rgba(16,185,129,0.07); }
     .pred-row.sign-ok { background: rgba(245,158,11,0.06); }
     .pred-center { text-align: center; }
-    .pred-score-pred {
-      font-size: 15px;
-      font-weight: 700;
-      line-height: 1;
-    }
-    .pred-score-real {
-      font-size: 10px;
-      color: var(--text2);
-      margin-top: 3px;
-    }
-    .badge {
-      font-size: 9px;
-      font-weight: 800;
-      border-radius: 4px;
-      padding: 1px 5px;
-      display: inline-block;
-      margin-top: 3px;
-    }
+    .pred-score-pred { font-size: 15px; font-weight: 700; line-height: 1; }
+    .pred-score-real { font-size: 10px; color: var(--text2); margin-top: 3px; }
+    .badge { font-size: 9px; font-weight: 800; border-radius: 4px; padding: 1px 5px; display: inline-block; margin-top: 3px; }
     .badge.exact { background: rgba(16,185,129,0.2); color: var(--green); }
     .badge.sign { background: rgba(245,158,11,0.2); color: var(--accent); }
-    .team-label { color: var(--text2); line-height: 1.3; }
-    .team-label.r { text-align: right; }
-    /* ── LOADING ── */
-    .loading {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 60px 20px;
-      gap: 14px;
-      color: var(--text2);
-    }
-    .spinner {
-      width: 30px; height: 30px;
-      border: 3px solid var(--surface2);
-      border-top-color: var(--accent);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-    /* ── ERROR ── */
-    .error-box {
-      margin: 16px 14px;
-      background: rgba(239,68,68,0.1);
-      border: 1px solid rgba(239,68,68,0.25);
-      border-radius: var(--radius);
-      padding: 14px;
-      color: #fca5a5;
-      font-size: 13px;
-      line-height: 1.5;
-    }
-    /* ── MISC ── */
-    .tip {
-      text-align: center;
-      font-size: 11px;
-      color: var(--text2);
-      padding: 10px 16px 4px;
-      line-height: 1.5;
-    }
+    .team-label { color: var(--text2); line-height: 1.3; } .team-label.r { text-align: right; }
+    .loading { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 60px 20px; gap: 14px; color: var(--text2); }
+    .spinner { width: 30px; height: 30px; border: 3px solid var(--surface2); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
+    .error-box { margin: 16px 14px; background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25); border-radius: var(--radius); padding: 14px; color: #fca5a5; font-size: 13px; line-height: 1.5; }
+    .tip { text-align: center; font-size: 11px; color: var(--text2); padding: 10px 16px 4px; line-height: 1.5; }
   </style>
 </head>
 <body>
@@ -371,104 +86,56 @@
   <button class="refresh-btn" id="refreshBtn" onclick="loadData(true)" title="Actualizar">↻</button>
 </header>
 <div class="content">
-  <div id="tabRanking" class="tab active">
-    <div class="loading"><div class="spinner"></div><span>Cargando clasificación...</span></div>
-  </div>
+  <div id="tabRanking" class="tab active"><div class="loading"><div class="spinner"></div><span>Cargando clasificación...</span></div></div>
   <div id="tabPartidos" class="tab"></div>
   <div id="tabPredicciones" class="tab"></div>
   <div id="tabMiPorra" class="tab"></div>
 </div>
 <nav class="bottom-nav">
-  <button class="nav-btn active" id="navRanking" onclick="switchTab('Ranking')">
-    <span class="icon">🏆</span>Ranking
-  </button>
-  <button class="nav-btn" id="navPartidos" onclick="switchTab('Partidos')">
-    <span class="icon">⚽</span>Partidos
-  </button>
-  <button class="nav-btn" id="navPredicciones" onclick="switchTab('Predicciones')">
-    <span class="icon">👥</span>Porras
-  </button>
-  <button class="nav-btn" id="navMiPorra" onclick="switchTab('MiPorra')">
-    <span class="icon">✏️</span>Mi Porra
-  </button>
+  <button class="nav-btn active" id="navRanking" onclick="switchTab('Ranking')"><span class="icon">🏆</span>Ranking</button>
+  <button class="nav-btn" id="navPartidos" onclick="switchTab('Partidos')"><span class="icon">⚽</span>Partidos</button>
+  <button class="nav-btn" id="navPredicciones" onclick="switchTab('Predicciones')"><span class="icon">👥</span>Porras</button>
+  <button class="nav-btn" id="navMiPorra" onclick="switchTab('MiPorra')"><span class="icon">✏️</span>Mi Porra</button>
 </nav>
 <script>
-// ─── CONFIG ────────────────────────────────────────────────
 const API = 'https://script.google.com/macros/s/AKfycbw4jRkZS5Ih_nsbmVEhnnJWhoRzFKRjXD-aIRAGYhQ_1PlAX7Nl_TrfLWL0qAITbQ_k/exec';
-// ─── FIXTURES ──────────────────────────────────────────────
 const MATCHES = [
-  {id:"A1",g:"A",j:1,h:"México",a:"Sudáfrica",d:"11 Jun"},
-  {id:"A2",g:"A",j:1,h:"Corea del Sur",a:"Chequia",d:"12 Jun"},
-  {id:"A3",g:"A",j:2,h:"Chequia",a:"Sudáfrica",d:"18 Jun"},
-  {id:"A4",g:"A",j:2,h:"México",a:"Corea del Sur",d:"19 Jun"},
-  {id:"A5",g:"A",j:3,h:"Chequia",a:"México",d:"25 Jun"},
-  {id:"A6",g:"A",j:3,h:"Sudáfrica",a:"Corea del Sur",d:"25 Jun"},
-  {id:"B1",g:"B",j:1,h:"Canadá",a:"Bosnia y Herzegovina",d:"12 Jun"},
-  {id:"B2",g:"B",j:1,h:"Qatar",a:"Suiza",d:"13 Jun"},
-  {id:"B3",g:"B",j:2,h:"Suiza",a:"Bosnia y Herzegovina",d:"18 Jun"},
-  {id:"B4",g:"B",j:2,h:"Canadá",a:"Qatar",d:"19 Jun"},
-  {id:"B5",g:"B",j:3,h:"Suiza",a:"Canadá",d:"24 Jun"},
-  {id:"B6",g:"B",j:3,h:"Bosnia y Herzegovina",a:"Qatar",d:"24 Jun"},
-  {id:"C1",g:"C",j:1,h:"Brasil",a:"Marruecos",d:"14 Jun"},
-  {id:"C2",g:"C",j:1,h:"Haití",a:"Escocia",d:"14 Jun"},
-  {id:"C3",g:"C",j:2,h:"Brasil",a:"Haití",d:"20 Jun"},
-  {id:"C4",g:"C",j:2,h:"Escocia",a:"Marruecos",d:"20 Jun"},
-  {id:"C5",g:"C",j:3,h:"Escocia",a:"Brasil",d:"25 Jun"},
-  {id:"C6",g:"C",j:3,h:"Marruecos",a:"Haití",d:"25 Jun"},
-  {id:"D1",g:"D",j:1,h:"EE.UU.",a:"Paraguay",d:"13 Jun"},
-  {id:"D2",g:"D",j:1,h:"Australia",a:"Turquía",d:"13 Jun"},
-  {id:"D3",g:"D",j:2,h:"Turquía",a:"Paraguay",d:"19 Jun"},
-  {id:"D4",g:"D",j:2,h:"EE.UU.",a:"Australia",d:"19 Jun"},
-  {id:"D5",g:"D",j:3,h:"Turquía",a:"EE.UU.",d:"26 Jun"},
-  {id:"D6",g:"D",j:3,h:"Paraguay",a:"Australia",d:"26 Jun"},
-  {id:"E1",g:"E",j:1,h:"Alemania",a:"Curazao",d:"14 Jun"},
-  {id:"E2",g:"E",j:1,h:"Costa de Marfil",a:"Ecuador",d:"15 Jun"},
-  {id:"E3",g:"E",j:2,h:"Alemania",a:"Costa de Marfil",d:"21 Jun"},
-  {id:"E4",g:"E",j:2,h:"Ecuador",a:"Curazao",d:"21 Jun"},
-  {id:"E5",g:"E",j:3,h:"Ecuador",a:"Alemania",d:"26 Jun"},
-  {id:"E6",g:"E",j:3,h:"Curazao",a:"Costa de Marfil",d:"26 Jun"},
-  {id:"F1",g:"F",j:1,h:"Países Bajos",a:"Japón",d:"14 Jun"},
-  {id:"F2",g:"F",j:1,h:"Túnez",a:"Suecia",d:"14 Jun"},
-  {id:"F3",g:"F",j:2,h:"Países Bajos",a:"Túnez",d:"21 Jun"},
-  {id:"F4",g:"F",j:2,h:"Japón",a:"Suecia",d:"21 Jun"},
-  {id:"F5",g:"F",j:3,h:"Suecia",a:"Países Bajos",d:"25 Jun"},
-  {id:"F6",g:"F",j:3,h:"Japón",a:"Túnez",d:"25 Jun"},
-  {id:"G1",g:"G",j:1,h:"Bélgica",a:"Egipto",d:"15 Jun"},
-  {id:"G2",g:"G",j:1,h:"Irán",a:"Nueva Zelanda",d:"15 Jun"},
-  {id:"G3",g:"G",j:2,h:"Bélgica",a:"Irán",d:"21 Jun"},
-  {id:"G4",g:"G",j:2,h:"Nueva Zelanda",a:"Egipto",d:"22 Jun"},
-  {id:"G5",g:"G",j:3,h:"Nueva Zelanda",a:"Bélgica",d:"26 Jun"},
-  {id:"G6",g:"G",j:3,h:"Egipto",a:"Irán",d:"26 Jun"},
-  {id:"H1",g:"H",j:1,h:"España",a:"Cabo Verde",d:"15 Jun"},
-  {id:"H2",g:"H",j:1,h:"Arabia Saudita",a:"Uruguay",d:"15 Jun"},
-  {id:"H3",g:"H",j:2,h:"España",a:"Arabia Saudita",d:"21 Jun"},
-  {id:"H4",g:"H",j:2,h:"Uruguay",a:"Cabo Verde",d:"21 Jun"},
-  {id:"H5",g:"H",j:3,h:"Uruguay",a:"España",d:"26 Jun"},
-  {id:"H6",g:"H",j:3,h:"Cabo Verde",a:"Arabia Saudita",d:"26 Jun"},
-  {id:"I1",g:"I",j:1,h:"Francia",a:"Senegal",d:"16 Jun"},
-  {id:"I2",g:"I",j:1,h:"Irak",a:"Noruega",d:"17 Jun"},
-  {id:"I3",g:"I",j:2,h:"Francia",a:"Irak",d:"22 Jun"},
-  {id:"I4",g:"I",j:2,h:"Noruega",a:"Senegal",d:"23 Jun"},
-  {id:"I5",g:"I",j:3,h:"Noruega",a:"Francia",d:"26 Jun"},
-  {id:"I6",g:"I",j:3,h:"Senegal",a:"Irak",d:"26 Jun"},
-  {id:"J1",g:"J",j:1,h:"Argentina",a:"Argelia",d:"17 Jun"},
-  {id:"J2",g:"J",j:1,h:"Austria",a:"Jordania",d:"17 Jun"},
-  {id:"J3",g:"J",j:2,h:"Argentina",a:"Austria",d:"23 Jun"},
-  {id:"J4",g:"J",j:2,h:"Jordania",a:"Argelia",d:"23 Jun"},
-  {id:"J5",g:"J",j:3,h:"Jordania",a:"Argentina",d:"27 Jun"},
-  {id:"J6",g:"J",j:3,h:"Argelia",a:"Austria",d:"27 Jun"},
-  {id:"K1",g:"K",j:1,h:"Portugal",a:"R.D. Congo",d:"17 Jun"},
-  {id:"K2",g:"K",j:1,h:"Uzbekistán",a:"Colombia",d:"17 Jun"},
-  {id:"K3",g:"K",j:2,h:"Portugal",a:"Uzbekistán",d:"23 Jun"},
-  {id:"K4",g:"K",j:2,h:"Colombia",a:"R.D. Congo",d:"23 Jun"},
-  {id:"K5",g:"K",j:3,h:"Colombia",a:"Portugal",d:"27 Jun"},
-  {id:"K6",g:"K",j:3,h:"R.D. Congo",a:"Uzbekistán",d:"27 Jun"},
-  {id:"L1",g:"L",j:1,h:"Inglaterra",a:"Panamá",d:"16 Jun"},
-  {id:"L2",g:"L",j:1,h:"Ghana",a:"Croacia",d:"16 Jun"},
-  {id:"L3",g:"L",j:2,h:"Inglaterra",a:"Ghana",d:"22 Jun"},
-  {id:"L4",g:"L",j:2,h:"Croacia",a:"Panamá",d:"22 Jun"},
-  {id:"L5",g:"L",j:3,h:"Croacia",a:"Inglaterra",d:"27 Jun"},
-  {id:"L6",g:"L",j:3,h:"Panamá",a:"Ghana",d:"27 Jun"}
+  {id:"A1",g:"A",j:1,h:"México",a:"Sudáfrica",d:"11 Jun"},{id:"A2",g:"A",j:1,h:"Corea del Sur",a:"Chequia",d:"12 Jun"},
+  {id:"A3",g:"A",j:2,h:"Chequia",a:"Sudáfrica",d:"18 Jun"},{id:"A4",g:"A",j:2,h:"México",a:"Corea del Sur",d:"19 Jun"},
+  {id:"A5",g:"A",j:3,h:"Chequia",a:"México",d:"25 Jun"},{id:"A6",g:"A",j:3,h:"Sudáfrica",a:"Corea del Sur",d:"25 Jun"},
+  {id:"B1",g:"B",j:1,h:"Canadá",a:"Bosnia y Herzegovina",d:"12 Jun"},{id:"B2",g:"B",j:1,h:"Qatar",a:"Suiza",d:"13 Jun"},
+  {id:"B3",g:"B",j:2,h:"Suiza",a:"Bosnia y Herzegovina",d:"18 Jun"},{id:"B4",g:"B",j:2,h:"Canadá",a:"Qatar",d:"19 Jun"},
+  {id:"B5",g:"B",j:3,h:"Suiza",a:"Canadá",d:"24 Jun"},{id:"B6",g:"B",j:3,h:"Bosnia y Herzegovina",a:"Qatar",d:"24 Jun"},
+  {id:"C1",g:"C",j:1,h:"Brasil",a:"Marruecos",d:"14 Jun"},{id:"C2",g:"C",j:1,h:"Haití",a:"Escocia",d:"14 Jun"},
+  {id:"C3",g:"C",j:2,h:"Brasil",a:"Haití",d:"20 Jun"},{id:"C4",g:"C",j:2,h:"Escocia",a:"Marruecos",d:"20 Jun"},
+  {id:"C5",g:"C",j:3,h:"Escocia",a:"Brasil",d:"25 Jun"},{id:"C6",g:"C",j:3,h:"Marruecos",a:"Haití",d:"25 Jun"},
+  {id:"D1",g:"D",j:1,h:"EE.UU.",a:"Paraguay",d:"13 Jun"},{id:"D2",g:"D",j:1,h:"Australia",a:"Turquía",d:"13 Jun"},
+  {id:"D3",g:"D",j:2,h:"Turquía",a:"Paraguay",d:"19 Jun"},{id:"D4",g:"D",j:2,h:"EE.UU.",a:"Australia",d:"19 Jun"},
+  {id:"D5",g:"D",j:3,h:"Turquía",a:"EE.UU.",d:"26 Jun"},{id:"D6",g:"D",j:3,h:"Paraguay",a:"Australia",d:"26 Jun"},
+  {id:"E1",g:"E",j:1,h:"Alemania",a:"Curazao",d:"14 Jun"},{id:"E2",g:"E",j:1,h:"Costa de Marfil",a:"Ecuador",d:"15 Jun"},
+  {id:"E3",g:"E",j:2,h:"Alemania",a:"Costa de Marfil",d:"21 Jun"},{id:"E4",g:"E",j:2,h:"Ecuador",a:"Curazao",d:"21 Jun"},
+  {id:"E5",g:"E",j:3,h:"Ecuador",a:"Alemania",d:"26 Jun"},{id:"E6",g:"E",j:3,h:"Curazao",a:"Costa de Marfil",d:"26 Jun"},
+  {id:"F1",g:"F",j:1,h:"Países Bajos",a:"Japón",d:"14 Jun"},{id:"F2",g:"F",j:1,h:"Túnez",a:"Suecia",d:"14 Jun"},
+  {id:"F3",g:"F",j:2,h:"Países Bajos",a:"Túnez",d:"21 Jun"},{id:"F4",g:"F",j:2,h:"Japón",a:"Suecia",d:"21 Jun"},
+  {id:"F5",g:"F",j:3,h:"Suecia",a:"Países Bajos",d:"25 Jun"},{id:"F6",g:"F",j:3,h:"Japón",a:"Túnez",d:"25 Jun"},
+  {id:"G1",g:"G",j:1,h:"Bélgica",a:"Egipto",d:"15 Jun"},{id:"G2",g:"G",j:1,h:"Irán",a:"Nueva Zelanda",d:"15 Jun"},
+  {id:"G3",g:"G",j:2,h:"Bélgica",a:"Irán",d:"21 Jun"},{id:"G4",g:"G",j:2,h:"Nueva Zelanda",a:"Egipto",d:"22 Jun"},
+  {id:"G5",g:"G",j:3,h:"Nueva Zelanda",a:"Bélgica",d:"26 Jun"},{id:"G6",g:"G",j:3,h:"Egipto",a:"Irán",d:"26 Jun"},
+  {id:"H1",g:"H",j:1,h:"España",a:"Cabo Verde",d:"15 Jun"},{id:"H2",g:"H",j:1,h:"Arabia Saudita",a:"Uruguay",d:"15 Jun"},
+  {id:"H3",g:"H",j:2,h:"España",a:"Arabia Saudita",d:"21 Jun"},{id:"H4",g:"H",j:2,h:"Uruguay",a:"Cabo Verde",d:"21 Jun"},
+  {id:"H5",g:"H",j:3,h:"Uruguay",a:"España",d:"26 Jun"},{id:"H6",g:"H",j:3,h:"Cabo Verde",a:"Arabia Saudita",d:"26 Jun"},
+  {id:"I1",g:"I",j:1,h:"Francia",a:"Senegal",d:"16 Jun"},{id:"I2",g:"I",j:1,h:"Irak",a:"Noruega",d:"17 Jun"},
+  {id:"I3",g:"I",j:2,h:"Francia",a:"Irak",d:"22 Jun"},{id:"I4",g:"I",j:2,h:"Noruega",a:"Senegal",d:"23 Jun"},
+  {id:"I5",g:"I",j:3,h:"Noruega",a:"Francia",d:"26 Jun"},{id:"I6",g:"I",j:3,h:"Senegal",a:"Irak",d:"26 Jun"},
+  {id:"J1",g:"J",j:1,h:"Argentina",a:"Argelia",d:"17 Jun"},{id:"J2",g:"J",j:1,h:"Austria",a:"Jordania",d:"17 Jun"},
+  {id:"J3",g:"J",j:2,h:"Argentina",a:"Austria",d:"23 Jun"},{id:"J4",g:"J",j:2,h:"Jordania",a:"Argelia",d:"23 Jun"},
+  {id:"J5",g:"J",j:3,h:"Jordania",a:"Argentina",d:"27 Jun"},{id:"J6",g:"J",j:3,h:"Argelia",a:"Austria",d:"27 Jun"},
+  {id:"K1",g:"K",j:1,h:"Portugal",a:"R.D. Congo",d:"17 Jun"},{id:"K2",g:"K",j:1,h:"Uzbekistán",a:"Colombia",d:"17 Jun"},
+  {id:"K3",g:"K",j:2,h:"Portugal",a:"Uzbekistán",d:"23 Jun"},{id:"K4",g:"K",j:2,h:"Colombia",a:"R.D. Congo",d:"23 Jun"},
+  {id:"K5",g:"K",j:3,h:"Colombia",a:"Portugal",d:"27 Jun"},{id:"K6",g:"K",j:3,h:"R.D. Congo",a:"Uzbekistán",d:"27 Jun"},
+  {id:"L1",g:"L",j:1,h:"Inglaterra",a:"Panamá",d:"16 Jun"},{id:"L2",g:"L",j:1,h:"Ghana",a:"Croacia",d:"16 Jun"},
+  {id:"L3",g:"L",j:2,h:"Inglaterra",a:"Ghana",d:"22 Jun"},{id:"L4",g:"L",j:2,h:"Croacia",a:"Panamá",d:"22 Jun"},
+  {id:"L5",g:"L",j:3,h:"Croacia",a:"Inglaterra",d:"27 Jun"},{id:"L6",g:"L",j:3,h:"Panamá",a:"Ghana",d:"27 Jun"}
 ];
 const GROUPS = ['A','B','C','D','E','F','G','H','I','J','K','L'];
 const KO_ROUNDS = [
@@ -478,11 +145,7 @@ const KO_ROUNDS = [
   { id:'3RD', label:'Tercer Puesto',    slots:['3RD'] },
   { id:'FIN', label:'Final',            slots:['FIN'] },
 ];
-// ─── STATE ─────────────────────────────────────────────────
-let porras = [];
-let real = {};
-let currentTab = 'Ranking';
-// ─── SCORING ───────────────────────────────────────────────
+let porras = [], real = {}, currentTab = 'Ranking';
 function sign(h, a) { return h > a ? '1' : h === a ? 'X' : '2'; }
 function calcPts(p) {
   let pts = 0, bd = [];
@@ -496,23 +159,17 @@ function calcPts(p) {
   Object.entries(realG).forEach(([g, t]) => { if (p.groups && p.groups[g] === t) gpts += 2; });
   if (gpts > 0) { pts += gpts; bd.push('📊+' + gpts); }
   let mEx = 0, m1x2 = 0;
-  // Fase de grupos
   MATCHES.forEach(m => {
-    const r = real[m.id];
-    if (!r) return;
-    const pred = p.matches?.[m.id];
-    if (!pred) return;
+    const r = real[m.id]; if (!r) return;
+    const pred = p.matches?.[m.id]; if (!pred) return;
     if (pred.h === r.h && pred.a === r.a) { pts += 3; mEx++; }
     else if (sign(pred.h, pred.a) === sign(r.h, r.a)) { pts += 1; m1x2++; }
   });
-  // Eliminatoria
   const kofPts = real._kofixtures || {};
   KO_ROUNDS.forEach(round => {
     round.slots.filter(sid => kofPts[sid]).forEach(sid => {
-      const r = real[sid];
-      if (!r) return;
-      const pred = p.matches?.[sid];
-      if (!pred) return;
+      const r = real[sid]; if (!r) return;
+      const pred = p.matches?.[sid]; if (!pred) return;
       if (pred.h === r.h && pred.a === r.a) { pts += 3; mEx++; }
       else if (sign(pred.h, pred.a) === sign(r.h, r.a)) { pts += 1; m1x2++; }
     });
@@ -521,83 +178,42 @@ function calcPts(p) {
   if (m1x2 > 0) bd.push('1X2×' + m1x2 + '(+' + m1x2 + ')');
   return { pts, bd };
 }
-// ─── FETCH ─────────────────────────────────────────────────
 async function loadData(force = false) {
   const btn = document.getElementById('refreshBtn');
-  btn.classList.add('spinning');
-  btn.style.pointerEvents = 'none';
+  btn.classList.add('spinning'); btn.style.pointerEvents = 'none';
   try {
     const [r1, r2] = await Promise.all([
       fetch(API + '?action=getPorras').then(r => r.json()),
       fetch(API + '?action=getRealResults').then(r => r.json())
     ]);
-    porras = r1.porras || [];
-    real   = r2.results || {};
+    porras = r1.porras || []; real = r2.results || {};
     localStorage.setItem('porra26_cache', JSON.stringify({ porras, real, ts: Date.now() }));
     renderAll();
     const played = Object.keys(real).filter(k => !k.startsWith('_')).length;
-    document.getElementById('subText').textContent =
-      played + ' partidos · actualizado ' + new Date().toLocaleTimeString('es', {hour:'2-digit', minute:'2-digit'});
+    document.getElementById('subText').textContent = played + ' partidos · actualizado ' + new Date().toLocaleTimeString('es', {hour:'2-digit', minute:'2-digit'});
   } catch (e) {
     const cached = localStorage.getItem('porra26_cache');
     if (cached) {
-      const d = JSON.parse(cached);
-      porras = d.porras;
-      real   = d.real;
-      renderAll();
-      document.getElementById('subText').textContent =
-        '⚠️ Sin red — caché del ' + new Date(d.ts).toLocaleString('es', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
+      const d = JSON.parse(cached); porras = d.porras; real = d.real; renderAll();
+      document.getElementById('subText').textContent = '⚠️ Sin red — caché del ' + new Date(d.ts).toLocaleString('es', {day:'2-digit', month:'2-digit', hour:'2-digit', minute:'2-digit'});
     } else {
-      document.getElementById('tabRanking').innerHTML =
-        '<div class="error-box">❌ No se pudo conectar al servidor y no hay datos en caché.<br>Comprueba tu conexión e inténtalo de nuevo.</div>';
+      document.getElementById('tabRanking').innerHTML = '<div class="error-box">❌ No se pudo conectar al servidor y no hay datos en caché.<br>Comprueba tu conexión e inténtalo de nuevo.</div>';
       document.getElementById('subText').textContent = 'Error de conexión';
     }
   }
-  btn.classList.remove('spinning');
-  btn.style.pointerEvents = '';
+  btn.classList.remove('spinning'); btn.style.pointerEvents = '';
 }
-// ─── RENDER RANKING ────────────────────────────────────────
 function renderRanking() {
-  const ranked = porras.map(p => ({ ...p, ...calcPts(p) }))
-                       .sort((a, b) => b.pts - a.pts);
+  const ranked = porras.map(p => ({ ...p, ...calcPts(p) })).sort((a, b) => b.pts - a.pts);
   const medals = ['🥇','🥈','🥉'];
   const played = Object.keys(real).filter(k => !k.startsWith('_')).length;
-  let html = `
-    <div class="stats-bar">
-      <div class="stat-chip">
-        <div class="val">${porras.length}</div>
-        <div class="lbl">Participantes</div>
-      </div>
-      <div class="stat-chip">
-        <div class="val">${played}</div>
-        <div class="lbl">Partidos</div>
-      </div>
-      <div class="stat-chip">
-        <div class="val">${ranked[0]?.pts ?? 0}</div>
-        <div class="lbl">Líder (pts)</div>
-      </div>
-    </div>
-    <div class="card">
-  `;
+  let html = `<div class="stats-bar"><div class="stat-chip"><div class="val">${porras.length}</div><div class="lbl">Participantes</div></div><div class="stat-chip"><div class="val">${played}</div><div class="lbl">Partidos</div></div><div class="stat-chip"><div class="val">${ranked[0]?.pts ?? 0}</div><div class="lbl">Líder (pts)</div></div></div><div class="card">`;
   ranked.forEach((p, i) => {
-    html += `
-      <div class="rank-row" onclick="goToPredicciones('${p.id}')">
-        <div class="rank-pos">${medals[i] || (i + 1)}</div>
-        <div class="rank-info">
-          <div class="rank-name">${p.name}</div>
-          ${p.alias ? `<div class="rank-alias">${p.alias}</div>` : ''}
-        </div>
-        <div class="rank-right">
-          <div class="rank-pts">${p.pts}</div>
-          <div class="rank-bd">${p.bd.join(' ')}&nbsp;</div>
-        </div>
-      </div>
-    `;
+    html += `<div class="rank-row" onclick="goToPredicciones('${p.id}')"><div class="rank-pos">${medals[i] || (i + 1)}</div><div class="rank-info"><div class="rank-name">${p.name}</div>${p.alias ? `<div class="rank-alias">${p.alias}</div>` : ''}</div><div class="rank-right"><div class="rank-pts">${p.pts}</div><div class="rank-bd">${p.bd.join(' ')}&nbsp;</div></div></div>`;
   });
   html += `</div><div class="tip">Toca un participante para ver sus predicciones</div>`;
   document.getElementById('tabRanking').innerHTML = html;
 }
-// ─── RENDER PARTIDOS ───────────────────────────────────────
 function renderPartidos() {
   let html = '';
   GROUPS.forEach(g => {
@@ -605,22 +221,10 @@ function renderPartidos() {
     html += `<div class="section-label">Grupo ${g}</div><div class="card">`;
     ms.forEach(m => {
       const r = real[m.id];
-      html += `
-        <div class="match-row">
-          <div class="team home">${m.h}</div>
-          <div class="score-box">
-            ${r
-              ? `<div class="score-live">${r.h}–${r.a}</div>`
-              : `<div class="score-pending">${m.d}</div>`
-            }
-          </div>
-          <div class="team away">${m.a}</div>
-        </div>
-      `;
+      html += `<div class="match-row"><div class="team home">${m.h}</div><div class="score-box">${r ? `<div class="score-live">${r.h}–${r.a}</div>` : `<div class="score-pending">${m.d}</div>`}</div><div class="team away">${m.a}</div></div>`;
     });
     html += `</div>`;
   });
-  // KO matches (shown when fixtures exist)
   const kof = real._kofixtures || {};
   KO_ROUNDS.forEach(round => {
     const defined = round.slots.filter(id => kof[id]);
@@ -628,106 +232,44 @@ function renderPartidos() {
     html += `<div class="section-label">${round.label}</div><div class="card">`;
     defined.forEach(id => {
       const m = kof[id], r = real[id];
-      html += `<div class="match-row">
-        <div class="team home">${m.h}</div>
-        <div class="score-box">
-          ${r ? `<div class="score-live">${r.h}–${r.a}</div>` : `<div class="score-pending">Pendiente</div>`}
-        </div>
-        <div class="team away">${m.a}</div>
-      </div>`;
+      html += `<div class="match-row"><div class="team home">${m.h}</div><div class="score-box">${r ? `<div class="score-live">${r.h}–${r.a}</div>` : `<div class="score-pending">Pendiente</div>`}</div><div class="team away">${m.a}</div></div>`;
     });
     html += `</div>`;
   });
   document.getElementById('tabPartidos').innerHTML = html;
 }
-// ─── RENDER PREDICCIONES ───────────────────────────────────
 function renderPredicciones(selId) {
-  if (!porras.length) {
-    document.getElementById('tabPredicciones').innerHTML =
-      '<div class="loading"><div class="spinner"></div></div>';
-    return;
-  }
+  if (!porras.length) { document.getElementById('tabPredicciones').innerHTML = '<div class="loading"><div class="spinner"></div></div>'; return; }
   const id  = selId || porras[0].id;
   const p   = porras.find(x => String(x.id) === String(id)) || porras[0];
   const { pts, bd } = calcPts(p);
-  const champStatus = real._champion
-    ? (p.champion === real._champion ? 'correct' : 'wrong')
-    : 'pending';
-  const ruStatus = real._runnerUp
-    ? (p.runnerUp === real._runnerUp ? 'correct' : 'wrong')
-    : 'pending';
-  const thirdStatus = real._third
-    ? (p.third === real._third ? 'correct' : 'wrong')
-    : 'pending';
-  let html = `
-    <div class="selector-wrap">
-      <label>Participante</label>
-      <select onchange="renderPredicciones(this.value)">
-        ${porras.map(x => `<option value="${x.id}" ${String(x.id)===String(id)?'selected':''}>${x.name}${x.alias?' · '+x.alias:''}</option>`).join('')}
-      </select>
-    </div>
-    <div class="pred-cards">
-      <div class="pred-card">
-        <div class="lbl">Puntos</div>
-        <div class="val" style="font-size:26px;color:var(--accent)">${pts}</div>
-      </div>
-      <div class="pred-card">
-        <div class="lbl">Campeón</div>
-        <div class="val ${champStatus}">${p.champion || '–'}</div>
-      </div>
-      <div class="pred-card">
-        <div class="lbl">Subcampeón</div>
-        <div class="val ${ruStatus}">${p.runnerUp || '–'}</div>
-      </div>
-      <div class="pred-card">
-        <div class="lbl">Tercer puesto</div>
-        <div class="val ${thirdStatus}">${p.third || '–'}</div>
-      </div>
-      <div class="pred-card">
-        <div class="lbl">Goleador</div>
-        <div class="val pending">${p.scorer || '–'}</div>
-      </div>
-    </div>
-    <div class="section-label">Primeros de grupo</div>
-    <div class="pred-cards">
-      ${GROUPS.map(g => {
-        const pick = p.groups ? p.groups[g] : undefined;
-        const realPick = real._groups ? real._groups[g] : undefined;
-        const status = realPick ? (pick === realPick ? 'correct' : 'wrong') : 'pending';
-        return `
-          <div class="pred-card">
-            <div class="lbl">Grupo ${g}</div>
-            <div class="val ${status}">${pick || '–'}</div>
-          </div>
-        `;
-      }).join('')}
-    </div>
-  `;
-  // KO match predictions (shown when fixtures exist)
+  const champStatus = real._champion ? (p.champion === real._champion ? 'correct' : 'wrong') : 'pending';
+  const ruStatus = real._runnerUp ? (p.runnerUp === real._runnerUp ? 'correct' : 'wrong') : 'pending';
+  const thirdStatus = real._third ? (p.third === real._third ? 'correct' : 'wrong') : 'pending';
+  let html = `<div class="selector-wrap"><label>Participante</label><select onchange="renderPredicciones(this.value)">${porras.map(x => `<option value="${x.id}" ${String(x.id)===String(id)?'selected':''}>${x.name}${x.alias?' · '+x.alias:''}</option>`).join('')}</select></div>
+  <div class="pred-cards">
+    <div class="pred-card"><div class="lbl">Puntos</div><div class="val" style="font-size:26px;color:var(--accent)">${pts}</div></div>
+    <div class="pred-card"><div class="lbl">Campeón</div><div class="val ${champStatus}">${p.champion || '–'}</div></div>
+    <div class="pred-card"><div class="lbl">Subcampeón</div><div class="val ${ruStatus}">${p.runnerUp || '–'}</div></div>
+    <div class="pred-card"><div class="lbl">Tercer puesto</div><div class="val ${thirdStatus}">${p.third || '–'}</div></div>
+    <div class="pred-card"><div class="lbl">Goleador</div><div class="val pending">${p.scorer || '–'}</div></div>
+  </div>
+  <div class="section-label">Primeros de grupo</div>
+  <div class="pred-cards">${GROUPS.map(g => { const pick = p.groups?.[g]; const realPick = real._groups?.[g]; const status = realPick ? (pick === realPick ? 'correct' : 'wrong') : 'pending'; return `<div class="pred-card"><div class="lbl">Grupo ${g}</div><div class="val ${status}">${pick || '–'}</div></div>`; }).join('')}</div>`;
   const kof = real._kofixtures || {};
-  const koWithFixtures = KO_ROUNDS.filter(r => r.slots.some(id => kof[id]));
+  const koWithFixtures = KO_ROUNDS.filter(rnd => rnd.slots.some(sid => kof[sid]));
   if (koWithFixtures.length) {
     koWithFixtures.forEach(round => {
-      const defined = round.slots.filter(id => kof[id]);
+      const defined = round.slots.filter(sid => kof[sid]);
       html += `<div class="section-label">${round.label}</div><div class="card">`;
-      defined.forEach(id => {
-        const m = kof[id];
-        const pred = p.matches?.[id];
-        const r = real[id];
+      defined.forEach(sid => {
+        const m = kof[sid], pred = p.matches?.[sid], r = real[sid];
         let cls = '', badge = '';
         if (pred && r) {
           if (pred.h === r.h && pred.a === r.a) { cls = 'exact'; badge = '<div class="badge exact">+3 EXACTO</div>'; }
           else if (sign(pred.h, pred.a) === sign(r.h, r.a)) { cls = 'sign-ok'; badge = '<div class="badge sign">+1 1X2</div>'; }
         }
-        html += `<div class="pred-row ${cls}">
-          <div class="team-label r">${m.h}</div>
-          <div class="pred-center">
-            <div class="pred-score-pred">${pred ? pred.h + '–' + pred.a : '–'}</div>
-            ${r ? `<div class="pred-score-real">(${r.h}–${r.a})</div>` : ''}
-            ${badge}
-          </div>
-          <div class="team-label">${m.a}</div>
-        </div>`;
+        html += `<div class="pred-row ${cls}"><div class="team-label r">${m.h}</div><div class="pred-center"><div class="pred-score-pred">${pred ? pred.h+'–'+pred.a : '–'}</div>${r ? `<div class="pred-score-real">(${r.h}–${r.a})</div>` : ''}${badge}</div><div class="team-label">${m.a}</div></div>`;
       });
       html += `</div>`;
     });
@@ -736,144 +278,67 @@ function renderPredicciones(selId) {
     const ms = MATCHES.filter(m => m.g === g);
     html += `<div class="section-label">Grupo ${g}</div><div class="card">`;
     ms.forEach(m => {
-      const pred = p.matches?.[m.id];
-      const r    = real[m.id];
+      const pred = p.matches?.[m.id], r = real[m.id];
       let cls = '', badge = '';
       if (pred && r) {
-        if (pred.h === r.h && pred.a === r.a) {
-          cls = 'exact'; badge = '<div class="badge exact">+3 EXACTO</div>';
-        } else if (sign(pred.h, pred.a) === sign(r.h, r.a)) {
-          cls = 'sign-ok'; badge = '<div class="badge sign">+1 1X2</div>';
-        }
+        if (pred.h === r.h && pred.a === r.a) { cls = 'exact'; badge = '<div class="badge exact">+3 EXACTO</div>'; }
+        else if (sign(pred.h, pred.a) === sign(r.h, r.a)) { cls = 'sign-ok'; badge = '<div class="badge sign">+1 1X2</div>'; }
       }
-      html += `
-        <div class="pred-row ${cls}">
-          <div class="team-label r">${m.h}</div>
-          <div class="pred-center">
-            <div class="pred-score-pred">${pred ? pred.h + '–' + pred.a : '–'}</div>
-            ${r ? `<div class="pred-score-real">(${r.h}–${r.a})</div>` : ''}
-            ${badge}
-          </div>
-          <div class="team-label">${m.a}</div>
-        </div>
-      `;
+      html += `<div class="pred-row ${cls}"><div class="team-label r">${m.h}</div><div class="pred-center"><div class="pred-score-pred">${pred ? pred.h+'–'+pred.a : '–'}</div>${r ? `<div class="pred-score-real">(${r.h}–${r.a})</div>` : ''}${badge}</div><div class="team-label">${m.a}</div></div>`;
     });
     html += `</div>`;
   });
   document.getElementById('tabPredicciones').innerHTML = html;
 }
-// ─── MI PORRA (predicciones eliminatoria desde móvil) ──────
 function renderMiPorra() {
   const wrap = document.getElementById('tabMiPorra');
-  if (!porras.length) {
-    wrap.innerHTML = '<div class="loading"><div class="spinner"></div><span>Cargando...</span></div>';
-    return;
-  }
+  if (!porras.length) { wrap.innerHTML = '<div class="loading"><div class="spinner"></div><span>Cargando...</span></div>'; return; }
   const myId = localStorage.getItem('porra26_myId');
   const myPorra = myId ? porras.find(p => String(p.id) === myId) : null;
-
-  let html = `
-    <div class="selector-wrap" style="margin-top:12px">
-      <label>¿Quién eres?</label>
-      <select id="myIdentitySelect" onchange="setMyIdentity(this.value)">
-        <option value="">— Selecciona tu nombre —</option>
-        ${porras.map(p => `<option value="${p.id}" ${String(p.id)===myId?'selected':''}>${p.name}${p.alias?' · '+p.alias:''}</option>`).join('')}
-      </select>
-    </div>`;
-
-  if (!myPorra) {
-    html += `<div class="tip">Selecciona tu nombre para añadir tus predicciones de eliminatoria.</div>`;
-    wrap.innerHTML = html;
-    return;
-  }
-
+  let html = `<div class="selector-wrap" style="margin-top:12px"><label>¿Quién eres?</label><select id="myIdentitySelect" onchange="setMyIdentity(this.value)"><option value="">— Selecciona tu nombre —</option>${porras.map(p => `<option value="${p.id}" ${String(p.id)===myId?'selected':''}>${p.name}${p.alias?' · '+p.alias:''}</option>`).join('')}</select></div>`;
+  if (!myPorra) { html += `<div class="tip">Selecciona tu nombre para añadir tus predicciones de eliminatoria.</div>`; wrap.innerHTML = html; return; }
   const kof = real._kofixtures || {};
   const roundsWithFixtures = KO_ROUNDS.filter(r => r.slots.some(id => kof[id]));
-
   if (!roundsWithFixtures.length) {
-    html += `
-      <div style="margin:14px 14px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center">
-        <div style="font-size:28px;margin-bottom:8px">⏳</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.6">Los emparejamientos de eliminatoria se publicarán en cuanto se conozcan.<br>¡Vuelve pronto!</div>
-      </div>`;
-    wrap.innerHTML = html;
-    return;
+    html += `<div style="margin:14px 14px 0;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:20px;text-align:center"><div style="font-size:28px;margin-bottom:8px">⏳</div><div style="font-size:13px;color:var(--text2);line-height:1.6">Los emparejamientos de eliminatoria se publicarán en cuanto se conozcan.<br>¡Vuelve pronto!</div></div>`;
+    wrap.innerHTML = html; return;
   }
-
   html += `<div class="section-label" style="margin-top:10px">Tus predicciones de eliminatoria</div>`;
-
-  // Cada ronda tiene su propio botón de envío y se bloquea individualmente
   roundsWithFixtures.forEach(round => {
     const defined = round.slots.filter(id => kof[id]);
     const isLocked = (myPorra.koLocked || []).includes(round.id);
-
-    html += `<div style="margin:0 14px 4px;padding:5px 10px;background:${isLocked?'rgba(100,116,139,0.15)':'rgba(245,158,11,0.1)'};border-radius:8px;display:flex;align-items:center;justify-content:space-between">
-      <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:${isLocked?'var(--text2)':'var(--accent)'}">${round.label}</span>
-      ${isLocked ? '<span style="font-size:11px;color:var(--text2)">🔒 Enviadas</span>' : ''}
-    </div>
-    <div class="card">`;
-
+    html += `<div style="margin:0 14px 4px;padding:5px 10px;background:${isLocked?'rgba(100,116,139,0.15)':'rgba(245,158,11,0.1)'};border-radius:8px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:${isLocked?'var(--text2)':'var(--accent)'}">${round.label}</span>${isLocked ? '<span style="font-size:11px;color:var(--text2)">🔒 Enviadas</span>' : ''}</div><div class="card">`;
     defined.forEach(id => {
-      const fix = kof[id];
-      const existing = myPorra.matches?.[id];
-      const r = real[id];
-      const disabled = isLocked || !!r; // bloqueado si ronda enviada O si ya hay resultado
+      const fix = kof[id], existing = myPorra.matches?.[id], r = real[id];
+      const disabled = isLocked || !!r;
       const borderColor = disabled ? 'var(--border)' : 'rgba(245,158,11,0.4)';
       const opacity = disabled ? '0.5' : '1';
-      html += `
-        <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:11px 12px;border-bottom:1px solid var(--border);gap:6px">
-          <div style="font-size:12px;font-weight:600;text-align:right;line-height:1.3">${fix.h}</div>
-          <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
-            <input type="number" id="mip_h_${id}" min="0" max="20" value="${existing!==undefined?existing.h:''}"
-              style="width:40px;height:38px;background:var(--surface2);border:1px solid ${borderColor};border-radius:8px;color:var(--text);font-size:18px;font-weight:700;text-align:center;outline:none;-webkit-appearance:none;-moz-appearance:textfield;opacity:${opacity}"
-              ${disabled?'disabled':''}>
-            <span style="color:var(--text2);font-weight:700;font-size:14px">–</span>
-            <input type="number" id="mip_a_${id}" min="0" max="20" value="${existing!==undefined?existing.a:''}"
-              style="width:40px;height:38px;background:var(--surface2);border:1px solid ${borderColor};border-radius:8px;color:var(--text);font-size:18px;font-weight:700;text-align:center;outline:none;-webkit-appearance:none;-moz-appearance:textfield;opacity:${opacity}"
-              ${disabled?'disabled':''}>
-          </div>
-          <div style="font-size:12px;font-weight:600;text-align:left;line-height:1.3">${fix.a}</div>
-        </div>
-        ${r ? `<div style="text-align:center;font-size:11px;color:var(--text2);padding:3px 0 4px">Resultado: ${r.h}–${r.a}</div>` : ''}
-        ${r && existing !== undefined ? (existing.h===r.h && existing.a===r.a ? `<div style="text-align:center;padding:2px 0 8px"><span style="background:rgba(16,185,129,0.2);color:var(--green);font-size:11px;font-weight:800;border-radius:5px;padding:3px 8px">✅ +3 EXACTO</span></div>` : sign(existing.h,existing.a)===sign(r.h,r.a) ? `<div style="text-align:center;padding:2px 0 8px"><span style="background:rgba(245,158,11,0.2);color:var(--accent);font-size:11px;font-weight:800;border-radius:5px;padding:3px 8px">🎯 +1 1X2</span></div>` : `<div style="text-align:center;padding:2px 0 8px"><span style="background:rgba(239,68,68,0.1);color:#ef4444;font-size:11px;font-weight:800;border-radius:5px;padding:3px 8px">❌ Sin puntos</span></div>`) : ''}`;
+      html += `<div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:11px 12px;border-bottom:1px solid var(--border);gap:6px"><div style="font-size:12px;font-weight:600;text-align:right;line-height:1.3">${fix.h}</div><div style="display:flex;align-items:center;gap:5px;flex-shrink:0"><input type="number" id="mip_h_${id}" min="0" max="20" value="${existing!==undefined?existing.h:''}" style="width:40px;height:38px;background:var(--surface2);border:1px solid ${borderColor};border-radius:8px;color:var(--text);font-size:18px;font-weight:700;text-align:center;outline:none;-webkit-appearance:none;-moz-appearance:textfield;opacity:${opacity}" ${disabled?'disabled':''}><span style="color:var(--text2);font-weight:700;font-size:14px">–</span><input type="number" id="mip_a_${id}" min="0" max="20" value="${existing!==undefined?existing.a:''}" style="width:40px;height:38px;background:var(--surface2);border:1px solid ${borderColor};border-radius:8px;color:var(--text);font-size:18px;font-weight:700;text-align:center;outline:none;-webkit-appearance:none;-moz-appearance:textfield;opacity:${opacity}" ${disabled?'disabled':''}></div><div style="font-size:12px;font-weight:600;text-align:left;line-height:1.3">${fix.a}</div></div>
+      ${r ? `<div style="text-align:center;font-size:11px;color:var(--text2);padding:3px 0 4px">Resultado: ${r.h}–${r.a}</div>` : ''}
+      ${r && existing !== undefined ? (existing.h===r.h && existing.a===r.a ? `<div style="text-align:center;padding:2px 0 8px"><span style="background:rgba(16,185,129,0.2);color:var(--green);font-size:11px;font-weight:800;border-radius:5px;padding:3px 8px">✅ +3 EXACTO</span></div>` : sign(existing.h,existing.a)===sign(r.h,r.a) ? `<div style="text-align:center;padding:2px 0 8px"><span style="background:rgba(245,158,11,0.2);color:var(--accent);font-size:11px;font-weight:800;border-radius:5px;padding:3px 8px">🎯 +1 1X2</span></div>` : `<div style="text-align:center;padding:2px 0 8px"><span style="background:rgba(239,68,68,0.1);color:#ef4444;font-size:11px;font-weight:800;border-radius:5px;padding:3px 8px">❌ Sin puntos</span></div>`) : ''}`;
     });
     html += `</div>`;
-
     if (isLocked) {
       html += `<div style="text-align:center;font-size:11px;color:var(--text2);padding:2px 14px 10px">🔒 Ya enviadas — no se pueden modificar</div>`;
     } else {
-      html += `
-        <div style="padding:8px 14px 12px">
-          <button id="miporraBtn_${round.id}" onclick="saveMiKOPredictions('${round.id}')"
-            style="width:100%;background:linear-gradient(135deg,#059669,#10b981);border:none;border-radius:12px;padding:14px;color:white;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:0.4px;box-shadow:0 4px 12px rgba(16,185,129,0.25)">
-            🔒 ENVIAR ${round.label.toUpperCase()}
-          </button>
-          <div id="miporraOk_${round.id}" style="display:none;margin-top:8px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:11px;text-align:center;font-size:13px;font-weight:600;color:#10b981">✅ ¡Enviadas y bloqueadas!</div>
-          <div id="miporraErr_${round.id}" style="display:none;margin-top:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);border-radius:10px;padding:11px;text-align:center;font-size:13px;color:#fca5a5"></div>
-        </div>`;
+      html += `<div style="padding:8px 14px 12px"><button id="miporraBtn_${round.id}" onclick="saveMiKOPredictions('${round.id}')" style="width:100%;background:linear-gradient(135deg,#059669,#10b981);border:none;border-radius:12px;padding:14px;color:white;font-size:15px;font-weight:800;cursor:pointer;letter-spacing:0.4px;box-shadow:0 4px 12px rgba(16,185,129,0.25)">🔒 ENVIAR ${round.label.toUpperCase()}</button><div id="miporraOk_${round.id}" style="display:none;margin-top:8px;background:rgba(16,185,129,0.12);border:1px solid rgba(16,185,129,0.3);border-radius:10px;padding:11px;text-align:center;font-size:13px;font-weight:600;color:#10b981">✅ ¡Enviadas y bloqueadas!</div><div id="miporraErr_${round.id}" style="display:none;margin-top:8px;background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.25);border-radius:10px;padding:11px;text-align:center;font-size:13px;color:#fca5a5"></div></div>`;
     }
   });
-
   wrap.innerHTML = html;
 }
-
 function setMyIdentity(id) {
   if (id) localStorage.setItem('porra26_myId', id);
   else localStorage.removeItem('porra26_myId');
   renderMiPorra();
 }
-
 async function saveMiKOPredictions(roundId) {
   const myId = localStorage.getItem('porra26_myId');
   const myPorra = porras.find(p => String(p.id) === myId);
   if (!myPorra) return;
-
   if ((myPorra.koLocked || []).includes(roundId)) return;
-
   const round = KO_ROUNDS.find(r => r.id === roundId);
   const btn = document.getElementById('miporraBtn_' + roundId);
   if (btn) { btn.disabled = true; btn.textContent = 'ENVIANDO...'; }
-
   const kof = real._kofixtures || {};
   const koPreds = {};
   round.slots.filter(id => kof[id]).forEach(id => {
@@ -881,32 +346,15 @@ async function saveMiKOPredictions(roundId) {
     const av = document.getElementById('mip_a_'+id)?.value;
     if (hv !== '' && av !== '') koPreds[id] = {h: parseInt(hv,10), a: parseInt(av,10)};
   });
-
   try {
-    const resp = await fetch(API + '?' + new URLSearchParams({
-      action: 'addKOPredictions',
-      id: String(myPorra.id),
-      roundId: roundId,
-      data: JSON.stringify(koPreds)
-    }));
+    const resp = await fetch(API + '?' + new URLSearchParams({action:'addKOPredictions', id:String(myPorra.id), roundId, data:JSON.stringify(koPreds)}));
     const result = await resp.json().catch(() => ({}));
     if (result.error) throw new Error(result.error);
-
-    // Actualizar estado local
-    const updated = {
-      ...myPorra,
-      matches: {...(myPorra.matches||{}), ...koPreds},
-      koLocked: [...(myPorra.koLocked||[]), roundId]
-    };
+    const updated = { ...myPorra, matches:{...(myPorra.matches||{}), ...koPreds}, koLocked:[...(myPorra.koLocked||[]), roundId] };
     const idx = porras.findIndex(p => p.id === updated.id);
     if (idx >= 0) porras[idx] = updated; else porras.push(updated);
     const cached = localStorage.getItem('porra26_cache');
-    if (cached) {
-      const d = JSON.parse(cached);
-      const ci = d.porras.findIndex(p => p.id === updated.id);
-      if (ci >= 0) d.porras[ci] = updated; else d.porras.push(updated);
-      localStorage.setItem('porra26_cache', JSON.stringify(d));
-    }
+    if (cached) { const d = JSON.parse(cached); const ci = d.porras.findIndex(p => p.id === updated.id); if (ci >= 0) d.porras[ci] = updated; else d.porras.push(updated); localStorage.setItem('porra26_cache', JSON.stringify(d)); }
     renderMiPorra();
   } catch(e) {
     if (btn) { btn.disabled = false; btn.textContent = '🔒 ENVIAR ' + round.label.toUpperCase(); }
@@ -914,27 +362,16 @@ async function saveMiKOPredictions(roundId) {
     if (errEl) { errEl.textContent = 'Error: ' + e.message; errEl.style.display='block'; setTimeout(()=>errEl.style.display='none',6000); }
   }
 }
-
-// ─── NAV ───────────────────────────────────────────────────
 function switchTab(tab) {
   currentTab = tab;
   ['Ranking','Partidos','Predicciones','MiPorra'].forEach(t => {
-    document.getElementById('tab' + t).classList.toggle('active', t === tab);
-    document.getElementById('nav' + t).classList.toggle('active', t === tab);
+    document.getElementById('tab'+t).classList.toggle('active', t===tab);
+    document.getElementById('nav'+t).classList.toggle('active', t===tab);
   });
   if (tab === 'MiPorra') renderMiPorra();
 }
-function goToPredicciones(id) {
-  switchTab('Predicciones');
-  renderPredicciones(id);
-}
-function renderAll() {
-  renderRanking();
-  renderPartidos();
-  renderPredicciones();
-  if (currentTab === 'MiPorra') renderMiPorra();
-}
-// ─── INIT ──────────────────────────────────────────────────
+function goToPredicciones(id) { switchTab('Predicciones'); renderPredicciones(id); }
+function renderAll() { renderRanking(); renderPartidos(); renderPredicciones(); if (currentTab==='MiPorra') renderMiPorra(); }
 loadData();
 </script>
 </body>
